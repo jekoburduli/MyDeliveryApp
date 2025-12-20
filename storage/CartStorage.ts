@@ -1,4 +1,7 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type CartItem = {
   id: string;
@@ -15,31 +18,52 @@ type CartStore = {
   clearCart: () => void;
 };
 
-export const useCartStore = create<CartStore>((set, get) => ({
-  items: [],
+const storage = {
+  getItem: async (key: string) => {
+    const value = await AsyncStorage.getItem(key);
+    return value ? JSON.parse(value) : null;
+  },
+  setItem: async (key: string, value: any) => {
+    await AsyncStorage.setItem(key, JSON.stringify(value));
+  },
+  removeItem: AsyncStorage.removeItem,
+};
 
-  addItem: (item) => {
-    const existing = get().items.find((i) => i.id === item.id);
-    if (existing) {
-      set({
-        items: get().items.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + item.quantity } : i
-        ),
-      });
-    } else {
-      set({ items: [...get().items, item] });
+export const useCartStore = create<CartStore>()(
+  persist(
+    immer((set) => ({
+      items: [],
+
+      addItem: (item) =>
+        set((state) => {
+          const existing = state.items.find((i) => i.id === item.id);
+
+          if (existing) {
+            existing.quantity += item.quantity;
+          } else {
+            state.items.push(item);
+          }
+        }),
+
+      removeItem: (id) =>
+        set((state) => {
+          state.items = state.items.filter((i) => i.id !== id);
+        }),
+
+      updateQuantity: (id, quantity) =>
+        set((state) => {
+          const item = state.items.find((i) => i.id === id);
+          if (item) item.quantity = quantity;
+        }),
+
+      clearCart: () =>
+        set((state) => {
+          state.items = [];
+        }),
+    })),
+    {
+      name: "cart-storage",
+      storage,
     }
-  },
-
-  removeItem: (id) => {
-    set({ items: get().items.filter((i) => i.id !== id) });
-  },
-
-  updateQuantity: (id, quantity) => {
-    set({
-      items: get().items.map((i) => (i.id === id ? { ...i, quantity } : i)),
-    });
-  },
-
-  clearCart: () => set({ items: [] }),
-}));
+  )
+);
