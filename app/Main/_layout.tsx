@@ -1,5 +1,6 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import Header from "../../components/Header";
 
 export default function MainLayout() {
   return (
@@ -7,12 +8,19 @@ export default function MainLayout() {
       <Tabs.Screen
         name="Home"
         options={{
-          title: "Home",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home-outline" size={size} color={color} />
           ),
+          header: () => (
+            <Header
+              location="Tbilisi, Georgia"
+              onCartPress={() => console.log("Go to Cart")}
+              onNotificationPress={() => console.log("Go to Notifications")}
+            />
+          ),
         }}
       />
+
       <Tabs.Screen
         name="Cart"
         options={{

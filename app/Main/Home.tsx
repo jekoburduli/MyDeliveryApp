@@ -1,31 +1,35 @@
-import { View, Text, FlatList, Pressable } from "react-native";
+import React from "react";
+import { View, StyleSheet, Text } from "react-native";
+import { FlashList } from "@shopify/flash-list";
+import RestaurantCard from "../../components/RestaurantCard";
 import { useRestaurantStore } from "../../storage/RestaurantStore";
 
-export default function Home() {
-  // Selector example
+const Home: React.FC = () => {
   const restaurants = useRestaurantStore((state) => state.restaurants);
 
   return (
-    <View style={{ flex: 1, padding: 20 }}>
-      <Text style={{ fontSize: 24, marginBottom: 10 }}>Restaurants</Text>
-
-      <FlatList
+    <View style={styles.container}>
+      <FlashList
         data={restaurants}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View
-            style={{
-              padding: 10,
-              marginBottom: 10,
-              backgroundColor: "#eee",
-              borderRadius: 8,
-            }}
-          >
-            <Text style={{ fontSize: 18 }}>{item.name}</Text>
-            <Text>Rating: {item.rating}</Text>
-          </View>
-        )}
+        renderItem={({ item }) => <RestaurantCard restaurant={item} />}
+        keyExtractor={(item) => item.id}
+        showsVerticalScrollIndicator={false}
+        ListHeaderComponent={
+          <Text style={styles.subtitleText}>Restaurants</Text>
+        }
+        ListHeaderComponentStyle={{ marginBottom: 16 }}
       />
     </View>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 16, backgroundColor: "#f9f9f9" },
+  subtitleText: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#333",
+  },
+});
+
+export default Home;
