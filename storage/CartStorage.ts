@@ -8,13 +8,18 @@ export type CartItem = {
   name: string;
   price: number;
   quantity: number;
+  restaurantName: string;
 };
 
 type CartStore = {
   items: CartItem[];
   addItem: (item: CartItem) => void;
-  removeItem: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
+  removeItem: (id: string, restaurantName: string) => void;
+  updateQuantity: (
+    id: string,
+    quantity: number,
+    restaurantName: string
+  ) => void;
   clearCart: () => void;
 };
 
@@ -36,7 +41,9 @@ export const useCartStore = create<CartStore>()(
 
       addItem: (item) =>
         set((state) => {
-          const existing = state.items.find((i) => i.id === item.id);
+          const existing = state.items.find(
+            (i) => i.id === item.id && i.restaurantName === item.restaurantName
+          );
 
           if (existing) {
             existing.quantity += item.quantity;
@@ -45,14 +52,18 @@ export const useCartStore = create<CartStore>()(
           }
         }),
 
-      removeItem: (id) =>
+      removeItem: (id, restaurantName) =>
         set((state) => {
-          state.items = state.items.filter((i) => i.id !== id);
+          state.items = state.items.filter(
+            (i) => i.id !== id || i.restaurantName !== restaurantName
+          );
         }),
 
-      updateQuantity: (id, quantity) =>
+      updateQuantity: (id, quantity, restaurantName) =>
         set((state) => {
-          const item = state.items.find((i) => i.id === id);
+          const item = state.items.find(
+            (i) => i.id === id && i.restaurantName === restaurantName
+          );
           if (item) item.quantity = quantity;
         }),
 

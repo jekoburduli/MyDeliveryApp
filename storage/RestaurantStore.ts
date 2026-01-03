@@ -25,7 +25,6 @@ type RestaurantStore = {
   addRestaurant: (restaurant: Restaurant) => void;
 };
 
-// ✅ simple JSON storage wrapper
 const storage = {
   getItem: async (key: string) => {
     const value = await AsyncStorage.getItem(key);
