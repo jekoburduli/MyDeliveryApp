@@ -21,6 +21,7 @@ type CartStore = {
     restaurantName: string
   ) => void;
   clearCart: () => void;
+  clearRestaurant: (restaurantName: string) => void; // NEW
 };
 
 const storage = {
@@ -70,6 +71,13 @@ export const useCartStore = create<CartStore>()(
       clearCart: () =>
         set((state) => {
           state.items = [];
+        }),
+
+      clearRestaurant: (restaurantName) =>
+        set((state) => {
+          state.items = state.items.filter(
+            (i) => i.restaurantName !== restaurantName
+          );
         }),
     })),
     {

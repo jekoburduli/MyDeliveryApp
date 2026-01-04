@@ -3,24 +3,23 @@ import { View, Text, StyleSheet, SafeAreaView, ScrollView } from "react-native";
 import { useCartStore, CartItem } from "../../storage/CartStorage";
 import RestaurantCartCard from "../../components/RestaurantCartCard";
 import Toast from "react-native-toast-message";
+import { router } from "expo-router";
 
 export default function Cart() {
-  const cartItems = useCartStore((state) => state.items);
+  const items = useCartStore((state) => state.items);
+  const removeItem = useCartStore((state) => state.removeItem);
+  const clearRestaurant = useCartStore((state) => state.clearRestaurant);
 
-  const groupedItems: Record<string, CartItem[]> = cartItems.reduce(
-    (acc, item) => {
-      if (!acc[item.restaurantName]) acc[item.restaurantName] = [];
-      acc[item.restaurantName].push(item);
-      return acc;
-    },
-    {} as Record<string, CartItem[]>
-  );
+  const groupedItems: Record<string, CartItem[]> = items.reduce((acc, item) => {
+    if (!acc[item.restaurantName]) acc[item.restaurantName] = [];
+    acc[item.restaurantName].push(item);
+    return acc;
+  }, {} as Record<string, CartItem[]>);
 
   const restaurantNames = Object.keys(groupedItems);
 
   const handleOrderPress = (restaurantName: string, items: CartItem[]) => {
-    const mealNames = items.map((item) => item.name).join(", ");
-
+    const mealNames = items.map((i) => i.name).join(", ");
     Toast.show({
       type: "success",
       text1: `Order from ${restaurantName}`,
@@ -30,9 +29,17 @@ export default function Cart() {
       visibilityTime: 3000,
       autoHide: true,
     });
+
+    router.push({
+      pathname: "/CheckoutScreen",
+      params: {
+        restaurantName,
+        items: JSON.stringify(items),
+      },
+    });
   };
 
-  if (cartItems.length === 0) {
+  if (items.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
         <Text style={styles.emptyText}>Your cart is empty</Text>
@@ -43,14 +50,14 @@ export default function Cart() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
-        {restaurantNames.map((restaurantName) => (
+        {restaurantNames.map((name) => (
           <RestaurantCartCard
-            key={restaurantName}
-            restaurantName={restaurantName}
-            items={groupedItems[restaurantName]}
-            onOrderPress={() =>
-              handleOrderPress(restaurantName, groupedItems[restaurantName])
-            }
+            key={name}
+            restaurantName={name}
+            items={groupedItems[name]}
+            onOrderPress={() => handleOrderPress(name, groupedItems[name])}
+            onDeleteRestaurant={() => clearRestaurant(name)}
+            onDeleteMeal={(mealId) => removeItem(mealId, name)}
           />
         ))}
       </ScrollView>
