@@ -26,7 +26,6 @@ export default function WelcomeScreen() {
   );
 }
 
-// Disable header
 export const screenOptions = {
   headerShown: false,
 };
@@ -36,7 +35,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#ffd3acff", // soft warm background
+    backgroundColor: "#ffd3acff",
     overflow: "hidden",
     paddingHorizontal: 20,
   },

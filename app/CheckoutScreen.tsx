@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import CheckoutMap from "../components/CheckoutMap";
+import { Notification } from "../utils/Notification";
+import NotificationSound from "../utils/sounds/NotificationSound.mp3";
 
 type CartItem = { id: string; name: string; price: number; quantity: number };
 
@@ -55,7 +57,8 @@ export default function CheckoutScreen() {
       courierInstructions,
       restaurantInstructions,
     });
-    Alert.alert("Order confirmed!");
+    //Alert.alert("Order confirmed!");
+    Notification(`Ordered Condirmed from ${restaurantName}`, NotificationSound);
   };
 
   return (
@@ -64,7 +67,6 @@ export default function CheckoutScreen() {
         <Text style={styles.restaurant}>{restaurantName}</Text>
         <Text style={styles.title}>Your Order</Text>
 
-        {/* Render cart items manually instead of FlatList */}
         {cartItems.map((item) => (
           <View key={item.id} style={styles.item}>
             <Text style={styles.itemName}>{item.name}</Text>

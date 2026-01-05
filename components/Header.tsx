@@ -22,13 +22,11 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        {/* Left: Location */}
         <View style={styles.locationContainer}>
           <Ionicons name="location-outline" size={30} color="#555" />
           <Text style={styles.locationText}>{location}</Text>
         </View>
 
-        {/* Right: Icons */}
         <View style={styles.icons}>
           <TouchableOpacity onPress={onNotificationPress} style={styles.icon}>
             <Ionicons name="notifications-outline" size={30} color="#333" />
