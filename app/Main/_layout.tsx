@@ -17,7 +17,7 @@ export default function MainLayout() {
               <Header
                 location="Tbilisi, Georgia"
                 onCartPress={() => router.push("./Cart")}
-                onNotificationPress={() => console.log("Go to Notifications")}
+                onProfilePress={() => router.push("./Profile")}
               />
             ),
           }}

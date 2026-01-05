@@ -22,6 +22,12 @@ export default function WelcomeScreen() {
           <Text style={styles.buttonText}>Get Started</Text>
         </TouchableOpacity>
       </Link>
+
+      <Link href="/Main/Profile" asChild>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Profile</Text>
+        </TouchableOpacity>
+      </Link>
     </View>
   );
 }
@@ -56,6 +62,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 60,
     borderRadius: 35,
     elevation: 3,
+    marginBottom: 12,
   },
   buttonText: {
     color: "#fff",

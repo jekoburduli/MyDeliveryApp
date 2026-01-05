@@ -11,13 +11,13 @@ import { Ionicons } from "@expo/vector-icons";
 type HeaderProps = {
   location: string;
   onCartPress?: () => void;
-  onNotificationPress?: () => void;
+  onProfilePress?: () => void;
 };
 
 const Header: React.FC<HeaderProps> = ({
   location,
   onCartPress,
-  onNotificationPress,
+  onProfilePress,
 }) => {
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -28,8 +28,8 @@ const Header: React.FC<HeaderProps> = ({
         </View>
 
         <View style={styles.icons}>
-          <TouchableOpacity onPress={onNotificationPress} style={styles.icon}>
-            <Ionicons name="notifications-outline" size={30} color="#333" />
+          <TouchableOpacity onPress={onProfilePress} style={styles.icon}>
+            <Ionicons name="person-outline" size={30} color="#333" />
           </TouchableOpacity>
           <TouchableOpacity onPress={onCartPress} style={styles.icon}>
             <Ionicons name="cart-outline" size={30} color="#333" />
