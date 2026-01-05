@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   TextInput,
   TouchableOpacity,
   Alert,
@@ -13,6 +12,7 @@ import { useLocalSearchParams } from "expo-router";
 import CheckoutMap from "../components/CheckoutMap";
 import { Notification } from "../utils/Notification";
 import NotificationSound from "../utils/sounds/NotificationSound.mp3";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type CartItem = { id: string; name: string; price: number; quantity: number };
 

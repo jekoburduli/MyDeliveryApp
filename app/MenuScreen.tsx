@@ -5,13 +5,13 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  SafeAreaView,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { useRestaurantStore, MenuItem } from "../storage/RestaurantStore";
 import { useCartStore } from "../storage/CartStorage";
 import { Image } from "expo-image";
 import Toast from "react-native-toast-message";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const MenuScreen = () => {
   const router = useRouter();

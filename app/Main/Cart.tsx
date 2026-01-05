@@ -1,6 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet, SafeAreaView, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useCartStore, CartItem } from "../../storage/CartStorage";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 import RestaurantCartCard from "../../components/RestaurantCartCard";
 import Toast from "react-native-toast-message";
 import { router } from "expo-router";
