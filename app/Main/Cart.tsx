@@ -2,12 +2,14 @@ import React from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useCartStore, CartItem } from "../../storage/CartStorage";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import RestaurantCartCard from "../../components/RestaurantCartCard";
 import Toast from "react-native-toast-message";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 export default function Cart() {
+  const { t } = useTranslation();
+
   const items = useCartStore((state) => state.items);
   const removeItem = useCartStore((state) => state.removeItem);
   const clearRestaurant = useCartStore((state) => state.clearRestaurant);
@@ -44,7 +46,9 @@ export default function Cart() {
   if (items.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.emptyText}>Your cart is empty</Text>
+        <Text style={styles.emptyText}>
+          {t("emptycart", { defaultValue: "Your cart is empty" })}
+        </Text>
       </SafeAreaView>
     );
   }

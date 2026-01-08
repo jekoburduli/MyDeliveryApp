@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import i18n from "../i18n";
 
 type HeaderProps = {
   location: string;
@@ -14,6 +15,11 @@ const Header: React.FC<HeaderProps> = ({
   onCartPress,
   onProfilePress,
 }) => {
+  const toggleLanguage = () => {
+    const newLang = i18n.language === "en" ? "ka" : "en";
+    i18n.changeLanguage(newLang);
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -26,8 +32,17 @@ const Header: React.FC<HeaderProps> = ({
           <TouchableOpacity onPress={onProfilePress} style={styles.icon}>
             <Ionicons name="person-outline" size={30} color="#333" />
           </TouchableOpacity>
+
           <TouchableOpacity onPress={onCartPress} style={styles.icon}>
             <Ionicons name="cart-outline" size={30} color="#333" />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={toggleLanguage} style={styles.icon}>
+            <Ionicons
+              name={i18n.language === "en" ? "earth-outline" : "earth-sharp"}
+              size={30}
+              color="#333"
+            />
           </TouchableOpacity>
         </View>
       </View>

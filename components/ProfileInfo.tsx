@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   name: string;
@@ -7,18 +8,24 @@ type Props = {
   onLogout: () => void;
 };
 
-const ProfileInfo = ({ name, email, onLogout }: Props) => (
-  <View style={styles.container}>
-    <Text style={styles.title}>Welcome, {name}!</Text>
-    <Text style={styles.text}>Email: {email}</Text>
-    <TouchableOpacity
-      style={[styles.button, { backgroundColor: "#e74c3c" }]}
-      onPress={onLogout}
-    >
-      <Text style={styles.buttonText}>Log Out</Text>
-    </TouchableOpacity>
-  </View>
-);
+const ProfileInfo = ({ name, email, onLogout }: Props) => {
+  const { t } = useTranslation();
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>{t("welcomeUser", { name })}</Text>
+      <Text style={styles.text}>
+        {t("email")}: {email}
+      </Text>
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: "#e74c3c" }]}
+        onPress={onLogout}
+      >
+        <Text style={styles.buttonText}>{t("logout")}</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

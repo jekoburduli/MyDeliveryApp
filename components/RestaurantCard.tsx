@@ -4,6 +4,7 @@ import { Image } from "expo-image";
 import Toast from "react-native-toast-message";
 import { useRouter } from "expo-router";
 import { Restaurant } from "../storage/RestaurantStore";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   restaurant: Restaurant;
@@ -11,11 +12,24 @@ type Props = {
 
 const RestaurantCard: React.FC<Props> = ({ restaurant }) => {
   const router = useRouter();
+  const { t } = useTranslation();
+
+  const deliveryMinutes = restaurant.deliveryTime;
+  let deliveryText = "";
+
+  if (deliveryMinutes >= 60) {
+    const hours = Math.floor(deliveryMinutes / 60);
+    deliveryText = `${hours} ${t("hour")}`;
+  } else {
+    deliveryText = `${deliveryMinutes} ${t("minute")}`;
+  }
+
+  const openText = restaurant.isOpen ? t("open") : t("closed");
 
   const handlePress = () => {
     Toast.show({
       type: "success",
-      text1: `${restaurant.name} selected`,
+      text1: `${restaurant.name} ${t("selected")}`,
       position: "bottom",
     });
 
@@ -36,8 +50,7 @@ const RestaurantCard: React.FC<Props> = ({ restaurant }) => {
         <View style={styles.infoContainer}>
           <Text style={styles.name}>{restaurant.name}</Text>
           <Text style={styles.details}>
-            ⭐ {restaurant.rating} • {restaurant.deliveryTime} min •{" "}
-            {restaurant.isOpen ? "Open" : "Closed"}
+            ⭐ {restaurant.rating} • {deliveryText} • {openText}
           </Text>
         </View>
       </View>

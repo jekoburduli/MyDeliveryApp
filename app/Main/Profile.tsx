@@ -7,7 +7,10 @@ import LoginForm from "../../components/LoginForm";
 import SignUpForm from "../../components/SignUpForm";
 import ProfileInfo from "../../components/ProfileInfo";
 
+import { useTranslation } from "react-i18next";
+
 const ProfileScreen = () => {
+  const { t } = useTranslation();
   const { users, currentUserId, logout } = useUserStore();
   const currentUser = users.find((u) => u.id === currentUserId);
 
@@ -16,7 +19,7 @@ const ProfileScreen = () => {
   if (!currentUser) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>You are not logged in yet</Text>
+        <Text style={styles.title}>{t("notLoggedIn")}</Text>
 
         {!mode && (
           <AuthButtons

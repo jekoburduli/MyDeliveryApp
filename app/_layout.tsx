@@ -3,6 +3,8 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
+import { I18nextProvider } from "react-i18next";
+import i18n from "../i18n";
 
 export default function RootLayout() {
   useEffect(() => {
@@ -28,13 +30,15 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <>
-      <StatusBar style="dark" />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-        }}
-      />
-    </>
+    <I18nextProvider i18n={i18n}>
+      <>
+        <StatusBar style="dark" />
+        <Stack
+          screenOptions={{
+            headerShown: false,
+          }}
+        />
+      </>
+    </I18nextProvider>
   );
 }

@@ -3,8 +3,10 @@ import { View, StyleSheet, Text } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import RestaurantCard from "../../components/RestaurantCard";
 import { useRestaurantStore } from "../../storage/RestaurantStore";
+import { useTranslation } from "react-i18next";
 
 const Home: React.FC = () => {
+  const { t } = useTranslation();
   const restaurants = useRestaurantStore((state) => state.restaurants);
 
   return (
@@ -15,7 +17,7 @@ const Home: React.FC = () => {
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
-          <Text style={styles.subtitleText}>Restaurants</Text>
+          <Text style={styles.subtitleText}>{t("restaurants")}</Text>
         }
         ListHeaderComponentStyle={{ marginBottom: 16 }}
       />

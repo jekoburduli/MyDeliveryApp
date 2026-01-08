@@ -1,12 +1,15 @@
 import { Link } from "expo-router";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
 
 export default function WelcomeScreen() {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.container}>
       <View style={styles.topCircle} />
       <View style={styles.bottomCircle} />
-
       <Image
         source={{
           uri: "https://cdn-icons-png.flaticon.com/512/1404/1404945.png",
@@ -14,18 +17,15 @@ export default function WelcomeScreen() {
         style={styles.image}
         resizeMode="contain"
       />
-
-      <Text style={styles.title}>Welcome!</Text>
-
+      <Text style={styles.title}>{t("welcome")}</Text>
       <Link href="/Main/Home" asChild>
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Get Started</Text>
+          <Text style={styles.buttonText}>{t("getStarted")}</Text>
         </TouchableOpacity>
       </Link>
-
       <Link href="/Main/Profile" asChild>
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Profile</Text>
+          <Text style={styles.buttonText}>{t("profile")}</Text>
         </TouchableOpacity>
       </Link>
     </View>
