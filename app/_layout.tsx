@@ -5,8 +5,11 @@ import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 import { I18nextProvider } from "react-i18next";
 import i18n from "../i18n";
+import { OfflineBanner } from "../components/OfflineBanner";
 
 export default function RootLayout() {
+  OfflineBanner();
+
   useEffect(() => {
     Notifications.setNotificationHandler({
       handleNotification: async () => ({
