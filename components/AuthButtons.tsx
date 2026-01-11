@@ -1,5 +1,6 @@
 import React from "react";
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
+import AppText from "../components/AppText";
 
 type Props = {
   onLoginPress: () => void;
@@ -9,11 +10,15 @@ type Props = {
 const AuthButtons = ({ onLoginPress, onSignUpPress }: Props) => (
   <View style={styles.container}>
     <TouchableOpacity style={styles.button} onPress={onLoginPress}>
-      <Text style={styles.buttonText}>Log In</Text>
+      <AppText style={styles.buttonText} bold>
+        Log In
+      </AppText>
     </TouchableOpacity>
 
     <TouchableOpacity style={styles.button} onPress={onSignUpPress}>
-      <Text style={styles.buttonText}>Sign Up</Text>
+      <AppText style={styles.buttonText} bold>
+        Sign Up
+      </AppText>
     </TouchableOpacity>
   </View>
 );
@@ -28,7 +33,7 @@ const styles = StyleSheet.create({
     width: 200,
     alignItems: "center",
   },
-  buttonText: { color: "white", fontWeight: "bold", fontSize: 16 },
+  buttonText: { color: "white", fontSize: 16 },
 });
 
 export default AuthButtons;

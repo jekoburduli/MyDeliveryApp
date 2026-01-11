@@ -1,6 +1,7 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
+import AppText from "../components/AppText";
 
 type Props = {
   name: string;
@@ -13,15 +14,19 @@ const ProfileInfo = ({ name, email, onLogout }: Props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{t("welcomeUser", { name })}</Text>
-      <Text style={styles.text}>
+      <AppText style={styles.title} bold>
+        {t("welcomeUser", { name })}
+      </AppText>
+      <AppText style={styles.text}>
         {t("email")}: {email}
-      </Text>
+      </AppText>
       <TouchableOpacity
         style={[styles.button, { backgroundColor: "#e74c3c" }]}
         onPress={onLogout}
       >
-        <Text style={styles.buttonText}>{t("logout")}</Text>
+        <AppText style={styles.buttonText} bold>
+          {t("logout")}
+        </AppText>
       </TouchableOpacity>
     </View>
   );
@@ -34,7 +39,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 20,
   },
-  title: { fontSize: 24, fontWeight: "bold", marginBottom: 20 },
+  title: { fontSize: 24, marginBottom: 20 },
   text: { fontSize: 18, marginBottom: 20 },
   button: {
     padding: 12,
@@ -43,7 +48,7 @@ const styles = StyleSheet.create({
     width: 200,
     alignItems: "center",
   },
-  buttonText: { color: "white", fontWeight: "bold", fontSize: 16 },
+  buttonText: { color: "white", fontSize: 16 },
 });
 
 export default ProfileInfo;

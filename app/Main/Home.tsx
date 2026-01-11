@@ -4,6 +4,7 @@ import { FlashList } from "@shopify/flash-list";
 import RestaurantCard from "../../components/RestaurantCard";
 import { useRestaurantStore } from "../../storage/RestaurantStore";
 import { useTranslation } from "react-i18next";
+import AppText from "../../components/AppText";
 
 const Home: React.FC = () => {
   const { t } = useTranslation();
@@ -17,7 +18,9 @@ const Home: React.FC = () => {
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
-          <Text style={styles.subtitleText}>{t("restaurants")}</Text>
+          <AppText style={styles.subtitleText} bold>
+            {t("restaurants")}
+          </AppText>
         }
         ListHeaderComponentStyle={{ marginBottom: 16 }}
       />

@@ -1,17 +1,12 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { View, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { useRestaurantStore, MenuItem } from "../storage/RestaurantStore";
 import { useCartStore } from "../storage/CartStorage";
 import { Image } from "expo-image";
 import Toast from "react-native-toast-message";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AppText from "../components/AppText";
 
 const MenuScreen = () => {
   const router = useRouter();
@@ -24,7 +19,7 @@ const MenuScreen = () => {
   const addItem = useCartStore((state) => state.addItem);
 
   if (!restaurant)
-    return <Text style={styles.error}>Restaurant not found</Text>;
+    return <AppText style={styles.error}>Restaurant not found</AppText>;
 
   const [quantities, setQuantities] = useState<Record<string, number>>(
     Object.fromEntries(restaurant.menu.map((item) => [item.id, 1]))
@@ -57,8 +52,8 @@ const MenuScreen = () => {
     <View style={styles.menuCard}>
       <Image source={item.image} style={styles.menuImage} contentFit="cover" />
       <View style={styles.menuInfo}>
-        <Text style={styles.menuName}>{item.name}</Text>
-        <Text style={styles.menuPrice}>${item.price.toFixed(2)}</Text>
+        <AppText style={styles.menuName}>{item.name}</AppText>
+        <AppText style={styles.menuPrice}>${item.price.toFixed(2)}</AppText>
 
         <View style={styles.bottomRow}>
           <View style={styles.quantityContainer}>
@@ -66,14 +61,20 @@ const MenuScreen = () => {
               onPress={() => decreaseQuantity(item.id)}
               style={styles.quantityButton}
             >
-              <Text style={styles.quantityButtonText}>-</Text>
+              <AppText style={styles.quantityButtonText} bold>
+                -
+              </AppText>
             </TouchableOpacity>
-            <Text style={styles.quantityText}>{quantities[item.id]}</Text>
+            <AppText style={styles.quantityText} bold>
+              {quantities[item.id]}
+            </AppText>
             <TouchableOpacity
               onPress={() => increaseQuantity(item.id)}
               style={styles.quantityButton}
             >
-              <Text style={styles.quantityButtonText}>+</Text>
+              <AppText style={styles.quantityButtonText} bold>
+                +
+              </AppText>
             </TouchableOpacity>
           </View>
 
@@ -81,7 +82,9 @@ const MenuScreen = () => {
             onPress={() => handleAddToCart(item)}
             style={styles.addButton}
           >
-            <Text style={styles.addButtonText}>Add</Text>
+            <AppText style={styles.addButtonText} bold>
+              Add
+            </AppText>
           </TouchableOpacity>
         </View>
       </View>
@@ -97,7 +100,7 @@ const MenuScreen = () => {
         ListHeaderComponent={
           <View style={styles.header}>
             <TouchableOpacity onPress={() => router.back()}>
-              <Text style={styles.backText}>← Back</Text>
+              <AppText style={styles.backText}>← Back</AppText>
             </TouchableOpacity>
 
             <Image
@@ -105,11 +108,13 @@ const MenuScreen = () => {
               style={styles.restaurantImage}
               contentFit="cover"
             />
-            <Text style={styles.restaurantName}>{restaurant.name}</Text>
-            <Text style={styles.restaurantDetails}>
+            <AppText style={styles.restaurantName} bold>
+              {restaurant.name}
+            </AppText>
+            <AppText style={styles.restaurantDetails}>
               ⭐ {restaurant.rating} • {restaurant.deliveryTime} min •{" "}
               {restaurant.isOpen ? "Open" : "Closed"}
-            </Text>
+            </AppText>
           </View>
         }
         contentContainerStyle={{ paddingBottom: 20 }}
@@ -135,7 +140,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginBottom: 8,
   },
-  restaurantName: { fontSize: 22, fontWeight: "700", color: "#222" },
+  restaurantName: { fontSize: 22, color: "#222" },
   restaurantDetails: { fontSize: 14, color: "#555", marginTop: 4 },
 
   menuCard: {
@@ -152,7 +157,7 @@ const styles = StyleSheet.create({
   },
   menuImage: { width: "100%", height: 180 },
   menuInfo: { padding: 12 },
-  menuName: { fontSize: 18, fontWeight: "600", color: "#222" },
+  menuName: { fontSize: 18, color: "#222" },
   menuPrice: { fontSize: 16, color: "#555", marginBottom: 8 },
 
   bottomRow: {
@@ -169,8 +174,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 6,
   },
-  quantityButtonText: { fontSize: 18, fontWeight: "600", color: "#333" },
-  quantityText: { marginHorizontal: 12, fontSize: 16, fontWeight: "600" },
+  quantityButtonText: { fontSize: 18, color: "#333" },
+  quantityText: { marginHorizontal: 12, fontSize: 16 },
 
   addButton: {
     backgroundColor: "#007AFF",
@@ -180,7 +185,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  addButtonText: { color: "#fff", fontWeight: "600", fontSize: 14 },
+  addButtonText: { color: "#fff", fontSize: 14 },
 
   error: { flex: 1, textAlign: "center", marginTop: 50, fontSize: 16 },
 });

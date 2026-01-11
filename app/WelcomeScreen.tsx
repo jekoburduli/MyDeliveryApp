@@ -1,7 +1,7 @@
 import { Link } from "expo-router";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
-import i18n from "../i18n";
+import AppText from "../components/AppText";
 
 export default function WelcomeScreen() {
   const { t } = useTranslation();
@@ -17,15 +17,21 @@ export default function WelcomeScreen() {
         style={styles.image}
         resizeMode="contain"
       />
-      <Text style={styles.title}>{t("welcome")}</Text>
+      <AppText style={styles.title} bold>
+        {t("welcome")}
+      </AppText>
       <Link href="/Main/Home" asChild>
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>{t("getStarted")}</Text>
+          <AppText style={styles.buttonText} bold>
+            {t("getStarted")}
+          </AppText>
         </TouchableOpacity>
       </Link>
       <Link href="/Main/Profile" asChild>
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>{t("profile")}</Text>
+          <AppText style={styles.buttonText} bold>
+            {t("profile")}
+          </AppText>
         </TouchableOpacity>
       </Link>
     </View>
@@ -52,7 +58,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
-    fontWeight: "bold",
     color: "#ff6a00ff",
     marginBottom: 40,
   },
@@ -67,7 +72,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 20,
-    fontWeight: "bold",
   },
   topCircle: {
     position: "absolute",

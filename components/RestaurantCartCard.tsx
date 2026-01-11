@@ -1,6 +1,7 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { CartItem } from "../storage/CartStorage";
+import AppText from "../components/AppText";
 
 type Props = {
   restaurantName: string;
@@ -41,36 +42,47 @@ export default function RestaurantCartCard({
   return (
     <View style={styles.card}>
       <View style={styles.header}>
-        <Text style={styles.restaurantName}>{restaurantName}</Text>
+        <AppText style={styles.restaurantName} bold>
+          {restaurantName}
+        </AppText>
         {onDeleteRestaurant && (
           <TouchableOpacity onPress={handleDeleteRestaurant}>
-            <Text style={styles.deleteText}>Delete All</Text>
+            <AppText style={styles.deleteText} bold>
+              Delete All
+            </AppText>
           </TouchableOpacity>
         )}
       </View>
 
       {items.map((item) => (
         <View key={item.id} style={styles.item}>
-          <Text>{item.name}</Text>
+          <AppText>{item.name}</AppText>
           <View style={styles.itemRight}>
-            <Text>
+            <AppText>
               {item.quantity} x {item.price}$
-            </Text>
+            </AppText>
             {onDeleteMeal && (
               <TouchableOpacity
                 onPress={() => handleDeleteMeal(item.id)}
                 style={styles.deleteMealButton}
               >
-                <Text style={styles.deleteText}>Remove</Text>
+                <AppText style={styles.deleteText} bold>
+                  Remove
+                </AppText>
               </TouchableOpacity>
             )}
           </View>
         </View>
       ))}
 
-      <Text style={styles.total}>Total: {totalPrice}$</Text>
+      <AppText style={styles.total} bold>
+        Total: {totalPrice}$
+      </AppText>
+
       <TouchableOpacity style={styles.orderButton} onPress={onOrderPress}>
-        <Text style={styles.orderButtonText}>Order</Text>
+        <AppText style={styles.orderButtonText} bold>
+          Order
+        </AppText>
       </TouchableOpacity>
     </View>
   );
@@ -89,7 +101,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 8,
   },
-  restaurantName: { fontSize: 18, fontWeight: "700" },
+  restaurantName: { fontSize: 18 },
   item: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -98,8 +110,8 @@ const styles = StyleSheet.create({
   },
   itemRight: { flexDirection: "row", alignItems: "center" },
   deleteMealButton: { marginLeft: 12 },
-  deleteText: { color: "red", fontWeight: "700" },
-  total: { fontWeight: "700", marginTop: 8 },
+  deleteText: { color: "red" },
+  total: { marginTop: 8 },
   orderButton: {
     backgroundColor: "#007AFF",
     padding: 10,
@@ -107,5 +119,5 @@ const styles = StyleSheet.create({
     marginTop: 12,
     alignItems: "center",
   },
-  orderButtonText: { color: "#fff", fontWeight: "600" },
+  orderButtonText: { color: "#fff" },
 });

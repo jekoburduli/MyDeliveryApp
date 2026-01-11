@@ -1,7 +1,8 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AppText from "../components/AppText";
 import i18n from "../i18n";
 
 type HeaderProps = {
@@ -25,7 +26,9 @@ const Header: React.FC<HeaderProps> = ({
       <View style={styles.container}>
         <View style={styles.locationContainer}>
           <Ionicons name="location-outline" size={30} color="#555" />
-          <Text style={styles.locationText}>{location}</Text>
+          <AppText style={styles.locationText} bold>
+            {location}
+          </AppText>
         </View>
 
         <View style={styles.icons}>
@@ -68,7 +71,6 @@ const styles = StyleSheet.create({
   locationText: {
     marginLeft: 5,
     fontSize: 18,
-    fontWeight: "bold",
     color: "#333",
   },
   icons: {

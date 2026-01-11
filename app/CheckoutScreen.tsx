@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   View,
-  Text,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -13,6 +12,7 @@ import CheckoutMap from "../components/CheckoutMap";
 import { Notification } from "../utils/Notification";
 import NotificationSound from "../utils/sounds/NotificationSound.mp3";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AppText from "../components/AppText";
 
 type CartItem = { id: string; name: string; price: number; quantity: number };
 
@@ -57,63 +57,75 @@ export default function CheckoutScreen() {
       courierInstructions,
       restaurantInstructions,
     });
-    //Alert.alert("Order confirmed!");
-    Notification(`Ordered Condirmed from ${restaurantName}`, NotificationSound);
+    Notification(`Ordered Confirmed from ${restaurantName}`, NotificationSound);
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
-        <Text style={styles.restaurant}>{restaurantName}</Text>
-        <Text style={styles.title}>Your Order</Text>
+        <AppText style={styles.restaurant} bold>
+          {restaurantName}
+        </AppText>
+
+        <AppText style={styles.title} bold>
+          Your Order
+        </AppText>
 
         {cartItems.map((item) => (
           <View key={item.id} style={styles.item}>
-            <Text style={styles.itemName}>{item.name}</Text>
-            <Text style={styles.itemPrice}>
+            <AppText style={styles.itemName}>{item.name}</AppText>
+            <AppText style={styles.itemPrice} bold>
               {item.quantity} x {item.price}$
-            </Text>
+            </AppText>
           </View>
         ))}
 
-        <Text style={styles.total}>Total: {total}$</Text>
+        <AppText style={styles.total} bold>
+          Total: {total}$
+        </AppText>
 
-        <Text style={styles.formTitle}>Delivery Information</Text>
+        <AppText style={styles.formTitle} bold>
+          Delivery Information
+        </AppText>
         <TextInput
           placeholder="First Name"
-          style={styles.input}
+          style={[styles.input, { fontFamily: "Inter" }]}
           value={name}
           onChangeText={setName}
         />
         <TextInput
           placeholder="Last Name"
-          style={styles.input}
+          style={[styles.input, { fontFamily: "Inter" }]}
           value={lastName}
           onChangeText={setLastName}
         />
         <TextInput
           placeholder="Phone"
-          style={styles.input}
+          style={[styles.input, { fontFamily: "Inter" }]}
           value={phone}
           onChangeText={setPhone}
           keyboardType="phone-pad"
         />
         <TextInput
           placeholder="Courier Instructions (optional)"
-          style={styles.input}
+          style={[styles.input, { fontFamily: "Inter" }]}
           value={courierInstructions}
           onChangeText={setCourierInstructions}
         />
 
-        <Text style={styles.formTitle}>Restaurant Instructions (optional)</Text>
+        <AppText style={styles.formTitle} bold>
+          Restaurant Instructions (optional)
+        </AppText>
         <TextInput
           placeholder="Special requests"
-          style={styles.input}
+          style={[styles.input, { fontFamily: "Inter" }]}
           value={restaurantInstructions}
           onChangeText={setRestaurantInstructions}
         />
 
-        <Text style={styles.formTitle}>Delivery Location</Text>
+        <AppText style={styles.formTitle} bold>
+          Delivery Location
+        </AppText>
         <CheckoutMap
           initialLocation={{ latitude: 41.7151, longitude: 44.8271 }}
           onLocationSelect={setDeliveryLocation}
@@ -123,7 +135,9 @@ export default function CheckoutScreen() {
           style={styles.confirmButton}
           onPress={handleConfirmOrder}
         >
-          <Text style={styles.confirmButtonText}>Confirm Order</Text>
+          <AppText style={styles.confirmButtonText} bold>
+            Confirm Order
+          </AppText>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -140,14 +154,12 @@ const styles = StyleSheet.create({
   },
   restaurant: {
     fontSize: 24,
-    fontWeight: "700",
     marginBottom: 8,
     textAlign: "center",
     color: "#333",
   },
   title: {
     fontSize: 20,
-    fontWeight: "600",
     marginBottom: 12,
     color: "#444",
   },
@@ -169,11 +181,10 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   itemPrice: {
-    fontWeight: "600",
     color: "#333",
+    fontSize: 16,
   },
   total: {
-    fontWeight: "700",
     fontSize: 18,
     textAlign: "right",
     marginTop: 8,
@@ -182,7 +193,6 @@ const styles = StyleSheet.create({
   },
   formTitle: {
     fontSize: 18,
-    fontWeight: "600",
     marginTop: 16,
     marginBottom: 8,
     color: "#222",
@@ -210,7 +220,6 @@ const styles = StyleSheet.create({
   },
   confirmButtonText: {
     color: "#fff",
-    fontWeight: "700",
     fontSize: 18,
   },
 });

@@ -1,11 +1,12 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import { useCartStore, CartItem } from "../../storage/CartStorage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import RestaurantCartCard from "../../components/RestaurantCartCard";
 import Toast from "react-native-toast-message";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
+import AppText from "../../components/AppText";
 
 export default function Cart() {
   const { t } = useTranslation();
@@ -26,8 +27,14 @@ export default function Cart() {
     const mealNames = items.map((i) => i.name).join(", ");
     Toast.show({
       type: "success",
-      text1: `Order from ${restaurantName}`,
-      text2: `Meals: ${mealNames}`,
+      text1: `${t("order_from", {
+        restaurant: restaurantName,
+        defaultValue: `Order from ${restaurantName}`,
+      })}`,
+      text2: `${t("meals", {
+        meals: mealNames,
+        defaultValue: `Meals: ${mealNames}`,
+      })}`,
       position: "bottom",
       topOffset: 200,
       visibilityTime: 3000,
@@ -46,9 +53,9 @@ export default function Cart() {
   if (items.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.emptyText}>
+        <AppText style={styles.emptyText} bold>
           {t("emptycart", { defaultValue: "Your cart is empty" })}
-        </Text>
+        </AppText>
       </SafeAreaView>
     );
   }
@@ -72,7 +79,11 @@ export default function Cart() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f5f5f5", padding: 16 },
+  container: {
+    flex: 1,
+    backgroundColor: "#f5f5f5",
+    padding: 16,
+  },
   emptyText: {
     textAlign: "center",
     marginTop: 50,

@@ -1,10 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import Toast from "react-native-toast-message";
 import { useRouter } from "expo-router";
 import { Restaurant } from "../storage/RestaurantStore";
 import { useTranslation } from "react-i18next";
+import AppText from "../components/AppText";
 
 type Props = {
   restaurant: Restaurant;
@@ -48,10 +49,12 @@ const RestaurantCard: React.FC<Props> = ({ restaurant }) => {
           contentFit="contain"
         />
         <View style={styles.infoContainer}>
-          <Text style={styles.name}>{restaurant.name}</Text>
-          <Text style={styles.details}>
+          <AppText style={styles.name} bold>
+            {restaurant.name}
+          </AppText>
+          <AppText style={styles.details}>
             ⭐ {restaurant.rating} • {deliveryText} • {openText}
-          </Text>
+          </AppText>
         </View>
       </View>
     </TouchableOpacity>
@@ -74,7 +77,7 @@ const styles = StyleSheet.create({
   },
   image: { width: "100%", height: 210 },
   infoContainer: { padding: 12, backgroundColor: "#fdfdfd" },
-  name: { fontSize: 18, fontWeight: "700", color: "#222" },
+  name: { fontSize: 18, color: "#222" },
   details: { fontSize: 13, color: "#555", marginTop: 4 },
 });
 

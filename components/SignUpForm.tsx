@@ -3,7 +3,6 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Text,
   StyleSheet,
   Dimensions,
 } from "react-native";
@@ -12,6 +11,7 @@ import { BlurView } from "expo-blur";
 import Checkbox from "expo-checkbox";
 import { Notification } from "../utils/Notification";
 import NotificationSound from "../utils/sounds/NotificationSound.mp3";
+import AppText from "../components/AppText";
 
 type Props = { onCancel: () => void };
 
@@ -74,15 +74,21 @@ const SignUpForm = ({ onCancel }: Props) => {
             onValueChange={setAcceptedTerms}
             color={acceptedTerms ? "#3498db" : undefined}
           />
-          <Text style={styles.checkboxText}>I accept Terms & Conditions</Text>
+          <AppText style={styles.checkboxText}>
+            I accept Terms & Conditions
+          </AppText>
         </View>
 
         <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>Sign Up</Text>
+          <AppText style={styles.buttonText} bold>
+            Sign Up
+          </AppText>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={onCancel}>
-          <Text style={styles.link}>Cancel</Text>
+          <AppText style={styles.link} bold>
+            Cancel
+          </AppText>
         </TouchableOpacity>
       </View>
     </View>
@@ -127,8 +133,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
-  buttonText: { color: "white", fontWeight: "bold", fontSize: 16 },
-  link: { color: "#3498db", marginTop: 12, fontWeight: "bold" },
+  buttonText: { color: "white", fontSize: 16 },
+  link: { color: "#3498db", marginTop: 12, fontSize: 16 },
   checkboxContainer: {
     flexDirection: "row",
     alignItems: "center",

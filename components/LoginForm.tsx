@@ -1,14 +1,9 @@
 import React, { useState } from "react";
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-} from "react-native";
+import { View, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { useUserStore } from "../storage/UsersStorage";
 import { Notification } from "../utils/Notification";
 import NotificationSound from "../utils/sounds/NotificationSound.mp3";
+import AppText from "../components/AppText";
 
 type Props = { onCancel: () => void };
 
@@ -47,10 +42,14 @@ const LoginForm = ({ onCancel }: Props) => {
         secureTextEntry
       />
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Submit</Text>
+        <AppText style={styles.buttonText} bold>
+          Submit
+        </AppText>
       </TouchableOpacity>
       <TouchableOpacity onPress={onCancel}>
-        <Text style={styles.link}>Cancel</Text>
+        <AppText style={styles.link} bold>
+          Cancel
+        </AppText>
       </TouchableOpacity>
     </View>
   );
@@ -74,8 +73,8 @@ const styles = StyleSheet.create({
     width: 200,
     alignItems: "center",
   },
-  buttonText: { color: "white", fontWeight: "bold", fontSize: 16 },
-  link: { color: "#3498db", marginTop: 10, fontWeight: "bold" },
+  buttonText: { color: "white", fontSize: 16 },
+  link: { color: "#3498db", marginTop: 10, fontSize: 16 },
 });
 
 export default LoginForm;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { useUserStore } from "../../storage/UsersStorage";
 
 import AuthButtons from "../../components/AuthButtons";
@@ -8,6 +8,7 @@ import SignUpForm from "../../components/SignUpForm";
 import ProfileInfo from "../../components/ProfileInfo";
 
 import { useTranslation } from "react-i18next";
+import AppText from "../../components/AppText";
 
 const ProfileScreen = () => {
   const { t } = useTranslation();
@@ -19,7 +20,9 @@ const ProfileScreen = () => {
   if (!currentUser) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>{t("notLoggedIn")}</Text>
+        <AppText style={styles.title} bold>
+          {t("notLoggedIn")}
+        </AppText>
 
         {!mode && (
           <AuthButtons
@@ -49,7 +52,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 20,
   },
-  title: { fontSize: 24, fontWeight: "bold", marginBottom: 20 },
+  title: { fontSize: 24, marginBottom: 20 },
 });
 
 export default ProfileScreen;
