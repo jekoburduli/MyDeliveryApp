@@ -15,7 +15,9 @@ export default function SplashScreen({ duration = 1000, nextScreen }: Props) {
 
   useEffect(() => {
     const load = async () => {
-      await Asset.fromModule(require("../assets/splash.png")).downloadAsync();
+      await Asset.fromModule(
+        require("../assets/Welcome/splash.png")
+      ).downloadAsync();
       setReady(true);
 
       Animated.timing(fadeAnim, {
@@ -38,7 +40,7 @@ export default function SplashScreen({ duration = 1000, nextScreen }: Props) {
     <View style={styles.container}>
       <Animated.View style={{ opacity: fadeAnim }}>
         <Image
-          source={require("../assets/splash.png")}
+          source={require("../assets/Welcome/splash.png")}
           style={styles.logo}
           resizeMode="contain"
         />

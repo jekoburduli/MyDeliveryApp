@@ -2,7 +2,6 @@ import { Link } from "expo-router";
 import { View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import AppText from "../components/AppText";
-
 export default function WelcomeScreen() {
   const { t } = useTranslation();
 
@@ -11,12 +10,10 @@ export default function WelcomeScreen() {
       <View style={styles.topCircle} />
       <View style={styles.bottomCircle} />
       <Image
-        source={{
-          uri: "https://cdn-icons-png.flaticon.com/512/1404/1404945.png",
-        }}
+        source={require("../assets/Welcome/WelcomeImage.jpg")}
         style={styles.image}
-        resizeMode="contain"
       />
+
       <AppText style={styles.title} bold>
         {t("welcome")}
       </AppText>
@@ -52,8 +49,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   image: {
-    width: 220,
-    height: 220,
+    width: 280,
+    height: 280,
     marginBottom: 40,
   },
   title: {
