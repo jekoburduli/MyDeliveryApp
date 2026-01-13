@@ -2,7 +2,7 @@ import React from "react";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AppText from "../components/AppText";
+import AppText from "./AppText";
 import i18n from "../i18n";
 
 type HeaderProps = {
@@ -22,10 +22,10 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={["top"]}>
       <View style={styles.container}>
         <View style={styles.locationContainer}>
-          <Ionicons name="location-outline" size={30} color="#555" />
+          <Ionicons name="location-outline" size={28} color="#555" />
           <AppText style={styles.locationText} bold>
             {location}
           </AppText>
@@ -33,17 +33,17 @@ const Header: React.FC<HeaderProps> = ({
 
         <View style={styles.icons}>
           <TouchableOpacity onPress={onProfilePress} style={styles.icon}>
-            <Ionicons name="person-outline" size={30} color="#333" />
+            <Ionicons name="person-outline" size={28} color="#333" />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={onCartPress} style={styles.icon}>
-            <Ionicons name="cart-outline" size={30} color="#333" />
+            <Ionicons name="cart-outline" size={28} color="#333" />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={toggleLanguage} style={styles.icon}>
             <Ionicons
               name={i18n.language === "en" ? "earth-outline" : "earth-sharp"}
-              size={30}
+              size={28}
               color="#333"
             />
           </TouchableOpacity>
@@ -62,23 +62,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 15,
-    paddingVertical: 10,
+    minHeight: 60,
   },
   locationContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
   locationText: {
-    marginLeft: 5,
-    fontSize: 18,
+    marginLeft: 6,
+    fontSize: 17,
     color: "#333",
   },
   icons: {
     flexDirection: "row",
   },
   icon: {
-    marginLeft: 15,
-    marginRight: 5,
+    marginLeft: 12,
   },
 });
 

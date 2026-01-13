@@ -61,7 +61,7 @@ export default function Cart() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
         {restaurantNames.map((name) => (
           <RestaurantCartCard
@@ -74,7 +74,7 @@ export default function Cart() {
           />
         ))}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f5f5f5",
     padding: 16,
+    paddingTop: 16,
   },
   emptyText: {
     textAlign: "center",
