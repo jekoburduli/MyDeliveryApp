@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import {
   View,
   StyleSheet,
@@ -22,7 +22,10 @@ export default function CheckoutScreen() {
     items?: string;
   }>();
   const restaurantName = params.restaurantName || "Restaurant";
-  const cartItems: CartItem[] = params.items ? JSON.parse(params.items) : [];
+
+  const cartItems: CartItem[] = useMemo(() => {
+    return params.items ? JSON.parse(params.items) : [];
+  }, [params.items]);
 
   const [deliveryLocation, setDeliveryLocation] = useState<{
     latitude: number;
@@ -34,13 +37,26 @@ export default function CheckoutScreen() {
   const [courierInstructions, setCourierInstructions] = useState("");
   const [restaurantInstructions, setRestaurantInstructions] = useState("");
 
-  const total = Number(
-    cartItems
-      .reduce((sum, item) => sum + item.price * item.quantity, 0)
-      .toFixed(2)
-  );
+  const total = useMemo(() => {
+    return Number(
+      cartItems
+        .reduce((sum, item) => sum + item.price * item.quantity, 0)
+        .toFixed(2),
+    );
+  }, [cartItems]);
 
-  const handleConfirmOrder = () => {
+  const renderedCartItems = useMemo(() => {
+    return cartItems.map((item) => (
+      <View key={item.id} style={styles.item}>
+        <AppText style={styles.itemName}>{item.name}</AppText>
+        <AppText style={styles.itemPrice} bold>
+          {item.quantity} x {item.price}$
+        </AppText>
+      </View>
+    ));
+  }, [cartItems]);
+
+  const handleConfirmOrder = useCallback(() => {
     if (!deliveryLocation) {
       Alert.alert("Select location first!");
       return;
@@ -49,16 +65,13 @@ export default function CheckoutScreen() {
       Alert.alert("Enter your details!");
       return;
     }
-    console.log({
-      restaurantName,
-      cartItems,
-      deliveryLocation,
-      customer: { name, lastName, phone },
-      courierInstructions,
-      restaurantInstructions,
-    });
-    Notification(`Ordered Confirmed from ${restaurantName}`, NotificationSound);
-  };
+
+    Notification(
+      `Success!`,
+      `Order Confirmed from ${restaurantName}`,
+      NotificationSound,
+    );
+  }, [deliveryLocation, name, lastName, phone, restaurantName]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -71,14 +84,7 @@ export default function CheckoutScreen() {
           Your Order
         </AppText>
 
-        {cartItems.map((item) => (
-          <View key={item.id} style={styles.item}>
-            <AppText style={styles.itemName}>{item.name}</AppText>
-            <AppText style={styles.itemPrice} bold>
-              {item.quantity} x {item.price}$
-            </AppText>
-          </View>
-        ))}
+        {renderedCartItems}
 
         <AppText style={styles.total} bold>
           Total: {total}$
@@ -150,7 +156,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
     paddingHorizontal: 16,
     paddingTop: 16,
-    marginHorizontal: 12,
   },
   restaurant: {
     fontSize: 24,

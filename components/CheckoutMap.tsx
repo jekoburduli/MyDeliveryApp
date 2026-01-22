@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import MapView, { Marker, MapPressEvent } from "react-native-maps";
 
@@ -16,11 +16,14 @@ export default function CheckoutMap({
     longitude: number;
   } | null>(null);
 
-  const handlePress = (e: MapPressEvent) => {
-    const loc = e.nativeEvent.coordinate;
-    setMarker(loc);
-    onLocationSelect(loc);
-  };
+  const handlePress = useCallback(
+    (e: MapPressEvent) => {
+      const loc = e.nativeEvent.coordinate;
+      setMarker(loc);
+      onLocationSelect(loc);
+    },
+    [onLocationSelect],
+  );
 
   return (
     <View style={styles.mapContainer}>

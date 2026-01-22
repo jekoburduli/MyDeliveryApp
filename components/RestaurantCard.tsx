@@ -18,25 +18,17 @@ const RestaurantCard: React.FC<Props> = ({ restaurant }) => {
   const deliveryMinutes = restaurant.deliveryTime;
 
   const deliveryText = useMemo(() => {
-    let deliveryText2 = "";
     if (deliveryMinutes >= 60) {
       const hours = Math.floor(deliveryMinutes / 60);
-      deliveryText2 = `${hours} ${t("hour")}`;
+      return `${hours} ${t("hour")}`;
     } else {
-      deliveryText2 = `${deliveryMinutes} ${t("minute")}`;
+      return `${deliveryMinutes} ${t("minute")}`;
     }
-    return deliveryText2;
-  }, []);
+  }, [deliveryMinutes, t]);
 
   const openText = restaurant.isOpen ? t("open") : t("closed");
 
   const handlePress = () => {
-    Toast.show({
-      type: "success",
-      text1: `${restaurant.name} ${t("selected")}`,
-      position: "bottom",
-    });
-
     router.push({
       pathname: "/MenuScreen",
       params: { restaurantId: restaurant.id },
@@ -52,9 +44,7 @@ const RestaurantCard: React.FC<Props> = ({ restaurant }) => {
           contentFit="contain"
         />
         <View style={styles.infoContainer}>
-          <AppText style={styles.name} bold>
-            {restaurant.name}
-          </AppText>
+          <AppText style={styles.name}>{restaurant.name}</AppText>
           <AppText style={styles.details}>
             ⭐ {restaurant.rating} • {deliveryText} • {openText}
           </AppText>

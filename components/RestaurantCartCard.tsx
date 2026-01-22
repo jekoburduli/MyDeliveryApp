@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { CartItem } from "../storage/CartStorage";
 import AppText from "../components/AppText";
@@ -18,11 +18,17 @@ export default function RestaurantCartCard({
   onDeleteRestaurant,
   onDeleteMeal,
 }: Props) {
-  const totalPrice = Number(
-    items.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2),
+  const totalPrice = useMemo(
+    () =>
+      Number(
+        items
+          .reduce((sum, item) => sum + item.price * item.quantity, 0)
+          .toFixed(2),
+      ),
+    [items],
   );
 
-  const handleDeleteRestaurant = () => {
+  const handleDeleteRestaurant = useCallback(() => {
     if (!onDeleteRestaurant) return;
     Alert.alert(
       "Delete Restaurant",
@@ -32,12 +38,15 @@ export default function RestaurantCartCard({
         { text: "Delete", style: "destructive", onPress: onDeleteRestaurant },
       ],
     );
-  };
+  }, [onDeleteRestaurant, restaurantName]);
 
-  const handleDeleteMeal = (id: string) => {
-    if (!onDeleteMeal) return;
-    onDeleteMeal(id);
-  };
+  const handleDeleteMeal = useCallback(
+    (id: string) => {
+      if (!onDeleteMeal) return;
+      onDeleteMeal(id);
+    },
+    [onDeleteMeal],
+  );
 
   return (
     <View style={styles.card}>

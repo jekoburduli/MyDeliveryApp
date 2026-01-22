@@ -1,11 +1,15 @@
 import * as Notifications from "expo-notifications";
 import { Audio } from "expo-av";
 
-export const Notification = async (message: string, soundFile: any) => {
+export const Notification = async (
+  title: string,
+  message: string,
+  soundFile: any,
+) => {
   try {
     await Notifications.scheduleNotificationAsync({
       content: {
-        title: "Welcome!",
+        title: title,
         body: message,
       },
       trigger: null,

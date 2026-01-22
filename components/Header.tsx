@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -16,10 +16,10 @@ const Header: React.FC<HeaderProps> = ({
   onCartPress,
   onProfilePress,
 }) => {
-  const toggleLanguage = () => {
+  const toggleLanguage = useCallback(() => {
     const newLang = i18n.language === "en" ? "ka" : "en";
     i18n.changeLanguage(newLang);
-  };
+  }, []);
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top"]}>

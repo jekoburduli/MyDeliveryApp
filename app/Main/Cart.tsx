@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import { useCartStore, CartItem } from "../../storage/CartStorage";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -15,40 +15,50 @@ export default function Cart() {
   const removeItem = useCartStore((state) => state.removeItem);
   const clearRestaurant = useCartStore((state) => state.clearRestaurant);
 
-  const groupedItems: Record<string, CartItem[]> = items.reduce((acc, item) => {
-    if (!acc[item.restaurantName]) acc[item.restaurantName] = [];
-    acc[item.restaurantName].push(item);
-    return acc;
-  }, {} as Record<string, CartItem[]>);
-
-  const restaurantNames = Object.keys(groupedItems);
-
-  const handleOrderPress = (restaurantName: string, items: CartItem[]) => {
-    const mealNames = items.map((i) => i.name).join(", ");
-    Toast.show({
-      type: "success",
-      text1: `${t("order_from", {
-        restaurant: restaurantName,
-        defaultValue: `Order from ${restaurantName}`,
-      })}`,
-      text2: `${t("meals", {
-        meals: mealNames,
-        defaultValue: `Meals: ${mealNames}`,
-      })}`,
-      position: "bottom",
-      topOffset: 200,
-      visibilityTime: 3000,
-      autoHide: true,
-    });
-
-    router.push({
-      pathname: "/CheckoutScreen",
-      params: {
-        restaurantName,
-        items: JSON.stringify(items),
+  const groupedItems = useMemo<Record<string, CartItem[]>>(() => {
+    return items.reduce(
+      (acc, item) => {
+        if (!acc[item.restaurantName]) acc[item.restaurantName] = [];
+        acc[item.restaurantName].push(item);
+        return acc;
       },
-    });
-  };
+      {} as Record<string, CartItem[]>,
+    );
+  }, [items]);
+
+  const restaurantNames = useMemo(() => {
+    return Object.keys(groupedItems);
+  }, [groupedItems]);
+
+  const handleOrderPress = useCallback(
+    (restaurantName: string, items: CartItem[]) => {
+      const mealNames = items.map((i) => i.name).join(", ");
+      Toast.show({
+        type: "success",
+        text1: `${t("order_from", {
+          restaurant: restaurantName,
+          defaultValue: `Order from ${restaurantName}`,
+        })}`,
+        text2: `${t("meals", {
+          meals: mealNames,
+          defaultValue: `Meals: ${mealNames}`,
+        })}`,
+        position: "bottom",
+        topOffset: 200,
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+
+      router.push({
+        pathname: "/CheckoutScreen",
+        params: {
+          restaurantName,
+          items: JSON.stringify(items),
+        },
+      });
+    },
+    [router, t],
+  );
 
   if (items.length === 0) {
     return (

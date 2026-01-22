@@ -16,7 +16,7 @@ export default function SplashScreen({ duration = 1000, nextScreen }: Props) {
   useEffect(() => {
     const load = async () => {
       await Asset.fromModule(
-        require("../assets/Welcome/splash.png")
+        require("../assets/Welcome/splash.png"),
       ).downloadAsync();
       setReady(true);
 

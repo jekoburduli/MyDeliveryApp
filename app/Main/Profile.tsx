@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { useUserStore } from "../../storage/UsersStorage";
 
@@ -13,7 +13,10 @@ import AppText from "../../components/AppText";
 const ProfileScreen = () => {
   const { t } = useTranslation();
   const { users, currentUserId, logout } = useUserStore();
-  const currentUser = users.find((u) => u.id === currentUserId);
+  const currentUser = useMemo(
+    () => users.find((u) => u.id === currentUserId),
+    [users, currentUserId],
+  );
 
   const [mode, setMode] = useState<"login" | "signup" | null>(null);
 

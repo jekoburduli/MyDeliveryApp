@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   View,
   TextInput,
@@ -26,7 +26,7 @@ const SignUpForm = ({ onCancel }: Props) => {
 
   const validateEmail = (email: string) => /\S+@\S+\.\S+/.test(email);
 
-  const handleSignUp = () => {
+  const handleSignUp = useCallback(() => {
     if (!name || !email || !password) return alert("All fields are required");
     if (!validateEmail(email)) return alert("Enter a valid email");
     if (password.length < 6)
@@ -38,8 +38,12 @@ const SignUpForm = ({ onCancel }: Props) => {
     const newUser = { id: Date.now().toString(), name, email, password };
     addUser(newUser);
     login(newUser.email, newUser.password);
-    Notification(`Hi ${name}, thanks for signing up!`, NotificationSound);
-  };
+    Notification(
+      `Welcome`,
+      `Hi ${name}, thanks for signing up!`,
+      NotificationSound,
+    );
+  }, [name, email, password, acceptedTerms, users, addUser, login]);
 
   return (
     <View style={styles.wrapper}>

@@ -1,124 +1,150 @@
-import React, { useState } from "react";
-import { View, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState, useMemo, useCallback } from "react";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { useRestaurantStore, MenuItem } from "../storage/RestaurantStore";
 import { useCartStore } from "../storage/CartStorage";
 import { Image } from "expo-image";
 import Toast from "react-native-toast-message";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { FlashList } from "@shopify/flash-list";
 import AppText from "../components/AppText";
 
 const MenuScreen = () => {
   const router = useRouter();
   const { restaurantId } = useLocalSearchParams<{ restaurantId: string }>();
-
   const restaurant = useRestaurantStore((state) =>
-    state.restaurants.find((r) => r.id === restaurantId)
+    state.restaurants.find((r) => r.id === restaurantId),
+  );
+  const addItem = useCartStore((state) => state.addItem);
+
+  const initialQuantities = useMemo(
+    () =>
+      restaurant
+        ? Object.fromEntries(restaurant.menu.map((item) => [item.id, 1]))
+        : {},
+    [restaurant],
+  );
+  const [quantities, setQuantities] =
+    useState<Record<string, number>>(initialQuantities);
+
+  const increaseQuantity = useCallback(
+    (id: string) => setQuantities((prev) => ({ ...prev, [id]: prev[id] + 1 })),
+    [],
   );
 
-  const addItem = useCartStore((state) => state.addItem);
+  const decreaseQuantity = useCallback(
+    (id: string) =>
+      setQuantities((prev) => ({ ...prev, [id]: Math.max(1, prev[id] - 1) })),
+    [],
+  );
+
+  const handleAddToCart = useCallback(
+    (item: MenuItem) => {
+      if (!restaurant) return;
+      const newItem = {
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: quantities[item.id],
+        restaurantName: restaurant.name,
+      };
+      addItem(newItem);
+      Toast.show({
+        type: "success",
+        text1: `${item.name} added to cart`,
+        position: "bottom",
+      });
+    },
+    [addItem, quantities, restaurant],
+  );
+
+  const renderItem = useCallback(
+    ({ item }: { item: MenuItem }) => (
+      <View style={styles.menuCard}>
+        <Image
+          source={item.image}
+          style={styles.menuImage}
+          contentFit="cover"
+        />
+        <View style={styles.menuInfo}>
+          <AppText style={styles.menuName}>{item.name}</AppText>
+          <AppText style={styles.menuPrice}>${item.price.toFixed(2)}</AppText>
+
+          <View style={styles.bottomRow}>
+            <View style={styles.quantityContainer}>
+              <TouchableOpacity
+                onPress={() => decreaseQuantity(item.id)}
+                style={styles.quantityButton}
+              >
+                <AppText style={styles.quantityButtonText} bold>
+                  -
+                </AppText>
+              </TouchableOpacity>
+              <AppText style={styles.quantityText} bold>
+                {quantities[item.id]}
+              </AppText>
+              <TouchableOpacity
+                onPress={() => increaseQuantity(item.id)}
+                style={styles.quantityButton}
+              >
+                <AppText style={styles.quantityButtonText} bold>
+                  +
+                </AppText>
+              </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity
+              onPress={() => handleAddToCart(item)}
+              style={styles.addButton}
+            >
+              <AppText style={styles.addButtonText} bold>
+                Add
+              </AppText>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    ),
+    [decreaseQuantity, increaseQuantity, handleAddToCart, quantities],
+  );
+
+  const headerComponent = useMemo(
+    () =>
+      restaurant && (
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.back()}>
+            <AppText style={styles.backText}>← Back</AppText>
+          </TouchableOpacity>
+
+          <Image
+            source={restaurant.image}
+            style={styles.restaurantImage}
+            contentFit="cover"
+          />
+          <AppText style={styles.restaurantName} bold>
+            {restaurant.name}
+          </AppText>
+          <AppText style={styles.restaurantDetails}>
+            ⭐ {restaurant.rating} • {restaurant.deliveryTime} min •{" "}
+            {restaurant.isOpen ? "Open" : "Closed"}
+          </AppText>
+        </View>
+      ),
+    [restaurant, router],
+  );
 
   if (!restaurant)
     return <AppText style={styles.error}>Restaurant not found</AppText>;
 
-  const [quantities, setQuantities] = useState<Record<string, number>>(
-    Object.fromEntries(restaurant.menu.map((item) => [item.id, 1]))
-  );
-
-  const increaseQuantity = (id: string) =>
-    setQuantities((prev) => ({ ...prev, [id]: prev[id] + 1 }));
-  const decreaseQuantity = (id: string) =>
-    setQuantities((prev) => ({ ...prev, [id]: Math.max(1, prev[id] - 1) }));
-
-  const handleAddToCart = (item: MenuItem) => {
-    const newItem = {
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      quantity: quantities[item.id],
-      restaurantName: restaurant.name,
-    };
-
-    addItem(newItem);
-
-    Toast.show({
-      type: "success",
-      text1: `${item.name} added to cart`,
-      position: "bottom",
-    });
-  };
-
-  const renderItem = ({ item }: { item: MenuItem }) => (
-    <View style={styles.menuCard}>
-      <Image source={item.image} style={styles.menuImage} contentFit="cover" />
-      <View style={styles.menuInfo}>
-        <AppText style={styles.menuName}>{item.name}</AppText>
-        <AppText style={styles.menuPrice}>${item.price.toFixed(2)}</AppText>
-
-        <View style={styles.bottomRow}>
-          <View style={styles.quantityContainer}>
-            <TouchableOpacity
-              onPress={() => decreaseQuantity(item.id)}
-              style={styles.quantityButton}
-            >
-              <AppText style={styles.quantityButtonText} bold>
-                -
-              </AppText>
-            </TouchableOpacity>
-            <AppText style={styles.quantityText} bold>
-              {quantities[item.id]}
-            </AppText>
-            <TouchableOpacity
-              onPress={() => increaseQuantity(item.id)}
-              style={styles.quantityButton}
-            >
-              <AppText style={styles.quantityButtonText} bold>
-                +
-              </AppText>
-            </TouchableOpacity>
-          </View>
-
-          <TouchableOpacity
-            onPress={() => handleAddToCart(item)}
-            style={styles.addButton}
-          >
-            <AppText style={styles.addButtonText} bold>
-              Add
-            </AppText>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
-  );
-
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
+      <FlashList
         data={restaurant.menu}
-        keyExtractor={(item) => item.id}
         renderItem={renderItem}
-        ListHeaderComponent={
-          <View style={styles.header}>
-            <TouchableOpacity onPress={() => router.back()}>
-              <AppText style={styles.backText}>← Back</AppText>
-            </TouchableOpacity>
-
-            <Image
-              source={restaurant.image}
-              style={styles.restaurantImage}
-              contentFit="cover"
-            />
-            <AppText style={styles.restaurantName} bold>
-              {restaurant.name}
-            </AppText>
-            <AppText style={styles.restaurantDetails}>
-              ⭐ {restaurant.rating} • {restaurant.deliveryTime} min •{" "}
-              {restaurant.isOpen ? "Open" : "Closed"}
-            </AppText>
-          </View>
-        }
-        contentContainerStyle={{ paddingBottom: 20 }}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={headerComponent}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 20 }}
       />
       <Toast />
     </SafeAreaView>
