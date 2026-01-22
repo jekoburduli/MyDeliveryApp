@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import Toast from "react-native-toast-message";
@@ -16,14 +16,17 @@ const RestaurantCard: React.FC<Props> = ({ restaurant }) => {
   const { t } = useTranslation();
 
   const deliveryMinutes = restaurant.deliveryTime;
-  let deliveryText = "";
 
-  if (deliveryMinutes >= 60) {
-    const hours = Math.floor(deliveryMinutes / 60);
-    deliveryText = `${hours} ${t("hour")}`;
-  } else {
-    deliveryText = `${deliveryMinutes} ${t("minute")}`;
-  }
+  const deliveryText = useMemo(() => {
+    let deliveryText2 = "";
+    if (deliveryMinutes >= 60) {
+      const hours = Math.floor(deliveryMinutes / 60);
+      deliveryText2 = `${hours} ${t("hour")}`;
+    } else {
+      deliveryText2 = `${deliveryMinutes} ${t("minute")}`;
+    }
+    return deliveryText2;
+  }, []);
 
   const openText = restaurant.isOpen ? t("open") : t("closed");
 

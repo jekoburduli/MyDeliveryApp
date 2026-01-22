@@ -18,7 +18,7 @@ type CartStore = {
   updateQuantity: (
     id: string,
     quantity: number,
-    restaurantName: string
+    restaurantName: string,
   ) => void;
   clearCart: () => void;
   clearRestaurant: (restaurantName: string) => void; // NEW
@@ -43,7 +43,7 @@ export const useCartStore = create<CartStore>()(
       addItem: (item) =>
         set((state) => {
           const existing = state.items.find(
-            (i) => i.id === item.id && i.restaurantName === item.restaurantName
+            (i) => i.id === item.id && i.restaurantName === item.restaurantName,
           );
 
           if (existing) {
@@ -53,17 +53,27 @@ export const useCartStore = create<CartStore>()(
           }
         }),
 
-      removeItem: (id, restaurantName) =>
+      removeItem: (id: string, restaurantName: string) =>
         set((state) => {
-          state.items = state.items.filter(
-            (i) => i.id !== id || i.restaurantName !== restaurantName
+          const item = state.items.find(
+            (i) => i.id === id && i.restaurantName === restaurantName,
           );
+
+          if (!item) return;
+
+          if (item.quantity > 1) {
+            item.quantity -= 1;
+          } else {
+            state.items = state.items.filter(
+              (i) => !(i.id === id && i.restaurantName === restaurantName),
+            );
+          }
         }),
 
       updateQuantity: (id, quantity, restaurantName) =>
         set((state) => {
           const item = state.items.find(
-            (i) => i.id === id && i.restaurantName === restaurantName
+            (i) => i.id === id && i.restaurantName === restaurantName,
           );
           if (item) item.quantity = quantity;
         }),
@@ -76,13 +86,13 @@ export const useCartStore = create<CartStore>()(
       clearRestaurant: (restaurantName) =>
         set((state) => {
           state.items = state.items.filter(
-            (i) => i.restaurantName !== restaurantName
+            (i) => i.restaurantName !== restaurantName,
           );
         }),
     })),
     {
       name: "cart-storage",
       storage,
-    }
-  )
+    },
+  ),
 );

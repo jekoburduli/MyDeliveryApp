@@ -6,6 +6,12 @@ type Props = TextProps & {
   style?: StyleProp<TextStyle>;
 };
 
+const LANG_MAP = {
+  ka: {
+    fontFamily: "NotoGeo",
+  },
+};
+
 export default function AppText({ bold, style, ...props }: Props) {
   const { i18n } = useTranslation();
   const isGeorgian = i18n.language === "ka";

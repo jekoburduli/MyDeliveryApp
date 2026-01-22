@@ -19,7 +19,7 @@ export default function RestaurantCartCard({
   onDeleteMeal,
 }: Props) {
   const totalPrice = Number(
-    items.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)
+    items.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2),
   );
 
   const handleDeleteRestaurant = () => {
@@ -30,7 +30,7 @@ export default function RestaurantCartCard({
       [
         { text: "Cancel", style: "cancel" },
         { text: "Delete", style: "destructive", onPress: onDeleteRestaurant },
-      ]
+      ],
     );
   };
 

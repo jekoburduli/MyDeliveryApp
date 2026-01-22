@@ -41,11 +41,9 @@ const Header: React.FC<HeaderProps> = ({
           </TouchableOpacity>
 
           <TouchableOpacity onPress={toggleLanguage} style={styles.icon}>
-            <Ionicons
-              name={i18n.language === "en" ? "earth-outline" : "earth-sharp"}
-              size={28}
-              color="#333"
-            />
+            <AppText style={styles.flag}>
+              {i18n.language === "ka" ? "🇺🇸" : "🇬🇪"}
+            </AppText>
           </TouchableOpacity>
         </View>
       </View>
@@ -78,6 +76,10 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginLeft: 12,
+  },
+  flag: {
+    fontSize: 30,
+    lineHeight: 34,
   },
 });
 

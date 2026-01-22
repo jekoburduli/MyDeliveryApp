@@ -2,6 +2,7 @@ import { Link } from "expo-router";
 import { View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import AppText from "../components/AppText";
+
 export default function WelcomeScreen() {
   const { t } = useTranslation();
 
