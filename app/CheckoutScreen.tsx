@@ -7,12 +7,12 @@ import {
   Alert,
   ScrollView,
 } from "react-native";
-import { useLocalSearchParams } from "expo-router";
-import CheckoutMap from "../components/CheckoutMap";
+import { router, useLocalSearchParams } from "expo-router";
 import { Notification } from "../utils/Notification";
 import NotificationSound from "../utils/sounds/NotificationSound.mp3";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppText from "../components/AppText";
+import { useLocationStore } from "../storage/LocationStore";
 
 type CartItem = { id: string; name: string; price: number; quantity: number };
 
@@ -27,15 +27,12 @@ export default function CheckoutScreen() {
     return params.items ? JSON.parse(params.items) : [];
   }, [params.items]);
 
-  const [deliveryLocation, setDeliveryLocation] = useState<{
-    latitude: number;
-    longitude: number;
-  }>();
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [courierInstructions, setCourierInstructions] = useState("");
   const [restaurantInstructions, setRestaurantInstructions] = useState("");
+  const { selectedLocation } = useLocationStore();
 
   const total = useMemo(() => {
     return Number(
@@ -57,7 +54,7 @@ export default function CheckoutScreen() {
   }, [cartItems]);
 
   const handleConfirmOrder = useCallback(() => {
-    if (!deliveryLocation) {
+    if (!selectedLocation) {
       Alert.alert("Select location first!");
       return;
     }
@@ -65,17 +62,21 @@ export default function CheckoutScreen() {
       Alert.alert("Enter your details!");
       return;
     }
-
+    router.back();
     Notification(
       `Success!`,
       `Order Confirmed from ${restaurantName}`,
       NotificationSound,
     );
-  }, [deliveryLocation, name, lastName, phone, restaurantName]);
+  }, [selectedLocation, name, lastName, phone, restaurantName]);
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <AppText style={styles.backText}>← Back</AppText>
+        </TouchableOpacity>
+
         <AppText style={styles.restaurant} bold>
           {restaurantName}
         </AppText>
@@ -132,10 +133,19 @@ export default function CheckoutScreen() {
         <AppText style={styles.formTitle} bold>
           Delivery Location
         </AppText>
-        <CheckoutMap
-          initialLocation={{ latitude: 41.7151, longitude: 44.8271 }}
-          onLocationSelect={setDeliveryLocation}
-        />
+
+        <AppText style={{ marginBottom: 8 }}>
+          {selectedLocation
+            ? `Address: ${selectedLocation.address}`
+            : "No address selected"}
+        </AppText>
+
+        <TouchableOpacity
+          onPress={() => router.push("/SelectAddressScreen")}
+          style={styles.selectLocationButton}
+        >
+          <AppText style={{ color: "#007AFF" }}>Select your location</AppText>
+        </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.confirmButton}
@@ -226,5 +236,17 @@ const styles = StyleSheet.create({
   confirmButtonText: {
     color: "#fff",
     fontSize: 18,
+  },
+  backText: {
+    fontSize: 16,
+    color: "#007AFF",
+    alignSelf: "flex-start",
+  },
+  selectLocationButton: {
+    padding: 12,
+    backgroundColor: "#e0e0e0",
+    borderRadius: 10,
+    marginBottom: 12,
+    alignItems: "center",
   },
 });
