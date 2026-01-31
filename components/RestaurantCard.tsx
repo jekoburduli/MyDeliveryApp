@@ -1,7 +1,6 @@
 import React, { useMemo } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
-import Toast from "react-native-toast-message";
 import { useRouter } from "expo-router";
 import { Restaurant } from "../storage/RestaurantStore";
 import { useTranslation } from "react-i18next";

@@ -1,8 +1,7 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, Suspense } from "react";
 import {
   View,
   TouchableOpacity,
-  Text,
   StyleSheet,
   TextInput,
   FlatList,
@@ -12,10 +11,10 @@ import {
 } from "react-native";
 import { useLocationStore } from "../storage/LocationStore";
 import { useRouter } from "expo-router";
-import CheckoutMap from "../components/CheckoutMap";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Location from "expo-location";
 import AppText from "../components/AppText";
+const LazyCheckoutMap = React.lazy(() => import("../components/CheckoutMap"));
 
 const GEOAPIFY_KEY = "28a1a196afef44a8ab4752357bffb5ec";
 
@@ -82,6 +81,8 @@ export default function SelectAddressScreen() {
 
   const goToUserLocation = async () => {
     try {
+      const Location = await import("expo-location");
+
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         console.log("Location permission denied");
@@ -158,11 +159,13 @@ export default function SelectAddressScreen() {
         </View>
 
         <View style={styles.mapContainer}>
-          <CheckoutMap
-            initialLocation={{ latitude: 41.7151, longitude: 44.8271 }}
-            onLocationSelect={handleLocationSelect}
-            selectedMarker={selectedMarker}
-          />
+          <Suspense fallback={<AppText>Loading map...</AppText>}>
+            <LazyCheckoutMap
+              initialLocation={{ latitude: 41.7151, longitude: 44.8271 }}
+              onLocationSelect={handleLocationSelect}
+              selectedMarker={selectedMarker}
+            />
+          </Suspense>
         </View>
 
         <View style={styles.buttonContainer}>
