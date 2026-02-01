@@ -1,14 +1,25 @@
 import React, { useCallback, useState } from "react";
-import { useUserStore } from "../storage/UsersStorage";
 import { View, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+
+import { useUserStore } from "../storage/UsersStorage";
 import { Notification } from "../utils/Notification";
+import NotificationSound from "../utils/sounds/NotificationSound.mp3";
 import AppText from "../components/AppText";
 
-import NotificationSound from "../utils/sounds/NotificationSound.mp3";
+import {
+  containers,
+  buttons,
+  typography,
+  spacing,
+  colors,
+  layout,
+} from "../styles/unistyles";
+
 type Props = { onCancel: () => void };
 
 const LoginForm = ({ onCancel }: Props) => {
   const { users, login } = useUserStore();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -18,11 +29,14 @@ const LoginForm = ({ onCancel }: Props) => {
     const user = users.find(
       (u) => u.email === email && u.password === password,
     );
+
     if (user) {
       login(user.email, user.password);
-      Notification(`Hi!`, `Welcome Back!`, NotificationSound);
-    } else alert("Invalid email or password");
-  }, [email, password]);
+      Notification("Hi!", "Welcome Back!", NotificationSound);
+    } else {
+      alert("Invalid email or password");
+    }
+  }, [email, password, users, login]);
 
   return (
     <View style={styles.form}>
@@ -34,6 +48,7 @@ const LoginForm = ({ onCancel }: Props) => {
         keyboardType="email-address"
         autoCapitalize="none"
       />
+
       <TextInput
         placeholder="Password"
         value={password}
@@ -41,13 +56,15 @@ const LoginForm = ({ onCancel }: Props) => {
         style={styles.input}
         secureTextEntry
       />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <AppText style={styles.buttonText} bold>
+
+      <TouchableOpacity style={buttons.primary} onPress={handleLogin}>
+        <AppText style={typography.button} bold>
           Submit
         </AppText>
       </TouchableOpacity>
-      <TouchableOpacity onPress={onCancel}>
-        <AppText style={styles.link} bold>
+
+      <TouchableOpacity onPress={onCancel} style={layout.mtM}>
+        <AppText style={[typography.body, { color: colors.primary }]} bold>
           Cancel
         </AppText>
       </TouchableOpacity>
@@ -56,25 +73,20 @@ const LoginForm = ({ onCancel }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  form: { width: "100%", alignItems: "center" },
+  form: {
+    ...containers.centered,
+    width: "100%",
+  },
   input: {
     width: "90%",
     borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
+    borderColor: colors.border,
     borderRadius: 8,
-    marginBottom: 10,
+    padding: spacing.m,
+    marginBottom: spacing.m,
+    fontSize: 16,
+    color: colors.textDark,
   },
-  button: {
-    backgroundColor: "#3498db",
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 10,
-    width: 200,
-    alignItems: "center",
-  },
-  buttonText: { color: "white", fontSize: 16 },
-  link: { color: "#3498db", marginTop: 10, fontSize: 16 },
 });
 
 export default LoginForm;

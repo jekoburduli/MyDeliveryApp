@@ -1,7 +1,7 @@
 import React from "react";
-import { View, TouchableOpacity, StyleSheet } from "react-native";
-import { useTranslation } from "react-i18next";
-import AppText from "../components/AppText";
+import { View, TouchableOpacity } from "react-native";
+import AppText from "./AppText";
+import { containers, buttons, typography, layout } from "../styles/unistyles";
 
 type Props = {
   name: string;
@@ -10,45 +10,19 @@ type Props = {
 };
 
 const ProfileInfo = ({ name, email, onLogout }: Props) => {
-  const { t } = useTranslation();
-
   return (
-    <View style={styles.container}>
-      <AppText style={styles.title} bold>
-        {t("welcomeUser", { name })}
-      </AppText>
-      <AppText style={styles.text}>
-        {t("email")}: {email}
-      </AppText>
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: "#e74c3c" }]}
-        onPress={onLogout}
-      >
-        <AppText style={styles.buttonText} bold>
-          {t("logout")}
+    <View style={[containers.card, layout.mtL]}>
+      <AppText style={[typography.h1, layout.mbM]}>Welcome, {name}!</AppText>
+
+      <AppText style={[typography.body, layout.mbM]}>Email: {email}</AppText>
+
+      <TouchableOpacity style={buttons.danger} onPress={onLogout}>
+        <AppText style={typography.button} bold>
+          Log Out
         </AppText>
       </TouchableOpacity>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
-  },
-  title: { fontSize: 24, marginBottom: 20 },
-  text: { fontSize: 18, marginBottom: 20 },
-  button: {
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 10,
-    width: 200,
-    alignItems: "center",
-  },
-  buttonText: { color: "white", fontSize: 16 },
-});
 
 export default ProfileInfo;

@@ -1,39 +1,36 @@
+// app/components/AuthButtons.tsx
 import React from "react";
-import { View, TouchableOpacity, StyleSheet } from "react-native";
-import AppText from "../components/AppText";
+import { View, TouchableOpacity } from "react-native";
+import AppText from "./AppText";
+import { containers, buttons, typography, layout } from "../styles/unistyles";
 
 type Props = {
   onLoginPress: () => void;
   onSignUpPress: () => void;
 };
 
-const AuthButtons = ({ onLoginPress, onSignUpPress }: Props) => (
-  <View style={styles.container}>
-    <TouchableOpacity style={styles.button} onPress={onLoginPress}>
-      <AppText style={styles.buttonText} bold>
-        Log In
-      </AppText>
-    </TouchableOpacity>
+const AuthButtons = ({ onLoginPress, onSignUpPress }: Props) => {
+  return (
+    <View style={[containers.columnCenter, layout.fullWidth]}>
+      <TouchableOpacity
+        style={[buttons.primary, layout.mbM]}
+        onPress={onLoginPress}
+      >
+        <AppText style={typography.button} bold>
+          Log In
+        </AppText>
+      </TouchableOpacity>
 
-    <TouchableOpacity style={styles.button} onPress={onSignUpPress}>
-      <AppText style={styles.buttonText} bold>
-        Sign Up
-      </AppText>
-    </TouchableOpacity>
-  </View>
-);
-
-const styles = StyleSheet.create({
-  container: { width: "100%", alignItems: "center" },
-  button: {
-    backgroundColor: "#3498db",
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 10,
-    width: 200,
-    alignItems: "center",
-  },
-  buttonText: { color: "white", fontSize: 16 },
-});
+      <TouchableOpacity
+        style={[buttons.primary, layout.mbM]}
+        onPress={onSignUpPress}
+      >
+        <AppText style={typography.button} bold>
+          Sign Up
+        </AppText>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 export default AuthButtons;

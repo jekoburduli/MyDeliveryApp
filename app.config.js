@@ -1,0 +1,34 @@
+import "dotenv/config";
+
+export default {
+  expo: {
+    name: "MyDeliveryApp",
+    slug: "MyDeliveryApp",
+    scheme: "MyDeliveryApp",
+    version: "1.0.0",
+    orientation: "portrait",
+    userInterfaceStyle: "light",
+    newArchEnabled: true,
+    splash: {
+      image: "./assets/Welcome/splash.png",
+      resizeMode: "contain",
+      backgroundColor: "#ffffff",
+    },
+    ios: {
+      supportsTablet: true,
+      bundleIdentifier: "com.anonymous.MyDeliveryApp",
+    },
+    android: {
+      adaptiveIcon: { backgroundColor: "#ffffff" },
+      edgeToEdgeEnabled: true,
+      predictiveBackGestureEnabled: false,
+      package: "com.anonymous.MyDeliveryApp",
+    },
+    web: { favicon: "./assets/favicon.png" },
+    plugins: ["expo-router", "expo-font"],
+
+    extra: {
+      GEOAPIFY_KEY: process.env.GEOAPIFY_KEY,
+    },
+  },
+};

@@ -15,8 +15,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as Location from "expo-location";
 import AppText from "../components/AppText";
 const LazyCheckoutMap = React.lazy(() => import("../components/CheckoutMap"));
-
-const GEOAPIFY_KEY = "28a1a196afef44a8ab4752357bffb5ec";
+import Constants from "expo-constants";
+const GEOAPIFY_KEY = Constants.expoConfig?.extra?.GEOAPIFY_KEY;
 
 export default function SelectAddressScreen() {
   const { setLocation } = useLocationStore();
@@ -141,7 +141,9 @@ export default function SelectAddressScreen() {
           {suggestions.length > 0 && (
             <FlatList
               data={suggestions}
-              keyExtractor={(item) => item.properties.place_id.toString()}
+              keyExtractor={(item, index) =>
+                `${item.properties.place_id}-${index}`
+              }
               renderItem={({ item }) => (
                 <TouchableOpacity
                   onPress={() => handleSelectSuggestion(item)}

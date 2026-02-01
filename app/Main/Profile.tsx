@@ -1,18 +1,19 @@
+// app/screens/ProfileScreen.tsx
 import React, { useMemo, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { useUserStore } from "../../storage/UsersStorage";
-
 import AuthButtons from "../../components/AuthButtons";
 import LoginForm from "../../components/LoginForm";
 import SignUpForm from "../../components/SignUpForm";
 import ProfileInfo from "../../components/ProfileInfo";
-
 import { useTranslation } from "react-i18next";
 import AppText from "../../components/AppText";
+import { containers, typography, layout } from "../../styles/unistyles";
 
 const ProfileScreen = () => {
   const { t } = useTranslation();
   const { users, currentUserId, logout } = useUserStore();
+
   const currentUser = useMemo(
     () => users.find((u) => u.id === currentUserId),
     [users, currentUserId],
@@ -22,8 +23,8 @@ const ProfileScreen = () => {
 
   if (!currentUser) {
     return (
-      <View style={styles.container}>
-        <AppText style={styles.title} bold>
+      <View style={[containers.screen, containers.centered]}>
+        <AppText style={[typography.h1, layout.mbL]} bold>
           {t("notLoggedIn")}
         </AppText>
 
@@ -33,6 +34,7 @@ const ProfileScreen = () => {
             onSignUpPress={() => setMode("signup")}
           />
         )}
+
         {mode === "login" && <LoginForm onCancel={() => setMode(null)} />}
         {mode === "signup" && <SignUpForm onCancel={() => setMode(null)} />}
       </View>
@@ -47,15 +49,5 @@ const ProfileScreen = () => {
     />
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
-  },
-  title: { fontSize: 24, marginBottom: 20 },
-});
 
 export default ProfileScreen;

@@ -1,24 +1,27 @@
 import React, { useCallback, useState } from "react";
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Dimensions,
-} from "react-native";
-import { useUserStore } from "../storage/UsersStorage";
+import { View, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { BlurView } from "expo-blur";
 import Checkbox from "expo-checkbox";
+
+import { useUserStore } from "../storage/UsersStorage";
 import { Notification } from "../utils/Notification";
 import NotificationSound from "../utils/sounds/NotificationSound.mp3";
 import AppText from "../components/AppText";
 
-type Props = { onCancel: () => void };
+import {
+  containers,
+  buttons,
+  typography,
+  spacing,
+  colors,
+  layout,
+} from "../styles/unistyles";
 
-const { width, height } = Dimensions.get("window");
+type Props = { onCancel: () => void };
 
 const SignUpForm = ({ onCancel }: Props) => {
   const { addUser, login, users } = useUserStore();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,114 +41,92 @@ const SignUpForm = ({ onCancel }: Props) => {
     const newUser = { id: Date.now().toString(), name, email, password };
     addUser(newUser);
     login(newUser.email, newUser.password);
+
     Notification(
-      `Welcome`,
+      "Welcome",
       `Hi ${name}, thanks for signing up!`,
       NotificationSound,
     );
-  }, [name, email, password, acceptedTerms, users, addUser, login]);
+  }, [name, email, password, acceptedTerms, users]);
 
   return (
-    <View style={styles.wrapper}>
-      <BlurView intensity={80} tint="light" style={styles.blurBackground} />
+    <View style={styles.form}>
+      <TextInput
+        placeholder="Name"
+        value={name}
+        onChangeText={setName}
+        style={styles.input}
+      />
 
-      <View style={styles.form}>
-        <TextInput
-          placeholder="Name"
-          value={name}
-          onChangeText={setName}
-          style={styles.input}
+      <TextInput
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        style={styles.input}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+
+      <TextInput
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        style={styles.input}
+        secureTextEntry
+      />
+
+      {/* Checkbox with fixed spacing */}
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          marginBottom: spacing.m,
+        }}
+      >
+        <Checkbox
+          value={acceptedTerms}
+          onValueChange={setAcceptedTerms}
+          color={acceptedTerms ? colors.primary : undefined}
         />
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          style={styles.input}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          style={styles.input}
-          secureTextEntry
-        />
-
-        <View style={styles.checkboxContainer}>
-          <Checkbox
-            value={acceptedTerms}
-            onValueChange={setAcceptedTerms}
-            color={acceptedTerms ? "#3498db" : undefined}
-          />
-          <AppText style={styles.checkboxText}>
-            I accept Terms & Conditions
-          </AppText>
-        </View>
-
-        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-          <AppText style={styles.buttonText} bold>
-            Sign Up
-          </AppText>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={onCancel}>
-          <AppText style={styles.link} bold>
-            Cancel
-          </AppText>
-        </TouchableOpacity>
+        <AppText style={{ marginLeft: spacing.s }}>
+          I accept Terms & Conditions
+        </AppText>
       </View>
+
+      <TouchableOpacity style={buttons.primary} onPress={handleSignUp}>
+        <AppText style={typography.button} bold>
+          Sign Up
+        </AppText>
+      </TouchableOpacity>
+
+      {/* Centered Cancel */}
+      <TouchableOpacity
+        onPress={onCancel}
+        style={{ marginTop: spacing.m, alignSelf: "center" }}
+      >
+        <AppText style={[typography.body, { color: colors.primary }]} bold>
+          Cancel
+        </AppText>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    width,
-    height,
-  },
-  blurBackground: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width,
-    height,
-  },
   form: {
-    width: "90%",
-    backgroundColor: "rgba(255,255,255,0.9)",
-    borderRadius: 12,
-    padding: 20,
-    alignItems: "center",
+    ...containers.centered,
+    width: "100%",
   },
   input: {
-    width: "100%",
+    width: "90%",
     borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
+    borderColor: colors.border,
     borderRadius: 8,
-    marginBottom: 12,
+    padding: spacing.m,
+    marginBottom: spacing.m,
+    fontSize: 16,
+    color: colors.textDark,
   },
-  button: {
-    backgroundColor: "#3498db",
-    padding: 12,
-    borderRadius: 8,
-    width: "100%",
-    alignItems: "center",
-    marginTop: 10,
-  },
-  buttonText: { color: "white", fontSize: 16 },
-  link: { color: "#3498db", marginTop: 12, fontSize: 16 },
-  checkboxContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 12,
-    width: "100%",
-  },
-  checkboxText: { marginLeft: 8, fontSize: 14 },
 });
 
 export default SignUpForm;
